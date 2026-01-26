@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "200061896914",
+    "project_id": "mentor-connect-x",
+    "storage_bucket": "mentor-connect-x.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:200061896914:android:c2f61ea47b52dccece050b",
+        "android_client_info": {
+          "package_name": "com.example.mentor_connect_x"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUPC1oV3wVhcGhBl6pnwRue5mXfUXMSOA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:200061896914:android:df63dcbeb158e34fce050b",
+        "android_client_info": {
+          "package_name": "com.orion.mentor_connect_x"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUPC1oV3wVhcGhBl6pnwRue5mXfUXMSOA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
