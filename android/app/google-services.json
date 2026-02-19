@@ -7,31 +7,25 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:200061896914:android:c2f61ea47b52dccece050b",
-        "android_client_info": {
-          "package_name": "com.example.mentor_connect_x"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAUPC1oV3wVhcGhBl6pnwRue5mXfUXMSOA"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:200061896914:android:df63dcbeb158e34fce050b",
         "android_client_info": {
           "package_name": "com.orion.mentor_connect_x"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "200061896914-do3a2si0iekjl0j987ep28dfr4oo73qa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.orion.mentor_connect_x",
+            "certificate_hash": "6b56fddd6e48b35f7e5764c2b8fdd9f9d32652ca"
+          }
+        },
+        {
+          "client_id": "200061896914-beq23c6b08hbi7vo60rsi4h4gsje14rs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAUPC1oV3wVhcGhBl6pnwRue5mXfUXMSOA"
@@ -39,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "200061896914-beq23c6b08hbi7vo60rsi4h4gsje14rs.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "200061896914-ma4alfqb1g68np6ngtqa6gen3fhdmuo8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.mentorConnectx"
+              }
+            }
+          ]
         }
       }
     }
