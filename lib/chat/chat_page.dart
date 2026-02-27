@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import '../calls/voice_call_page.dart'; // Added import
+import '../calls/video_call_page.dart';
 
 class ChatPage extends StatefulWidget {
   final String chatId;
@@ -41,47 +42,15 @@ class _ChatPageState extends State<ChatPage> {
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.call),
-            onPressed: () async {
-  final uid = FirebaseAuth.instance.currentUser!.uid;
-
-  final chatSnapshot = await FirebaseFirestore.instance
-      .collection('chats')
-      .doc(widget.chatId)
-      .get();
-
-  final chatData = chatSnapshot.data();
-  if (chatData == null) return;
-
-  final mentorId = chatData['mentorId'];
-  final studentId = chatData['studentId'];
-
-  final receiverId =
-      uid == mentorId ? studentId : mentorId;
-
-  final callDoc = await FirebaseFirestore.instance.collection('calls').add({
-    'chatId': widget.chatId,
-    'callerId': uid,
-    'receiverId': receiverId,
-    'status': 'ringing',
-    'createdAt': FieldValue.serverTimestamp(),
-  });
-
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (_) => VoiceCallPage(
-        callId: callDoc.id,
-        chatId: widget.chatId,
-        isCaller: true,
-      ),
-    ),
-  );
-},
-
-          )
-        ],
+  IconButton(
+    icon: const Icon(Icons.call),
+    onPressed: _startVoiceCall,
+  ),
+  IconButton(
+    icon: const Icon(Icons.videocam),
+    onPressed: _startVideoCall,
+  ),
+],
       ),
       // -----------------------------------------------
       body: Column(
@@ -208,6 +177,82 @@ class _ChatPageState extends State<ChatPage> {
         RegExp(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b');
     return phoneRegex.hasMatch(text) || emailRegex.hasMatch(text);
   }
+
+  Future<void> _startVoiceCall() async {
+  final uid = FirebaseAuth.instance.currentUser!.uid;
+
+  final chatSnapshot = await FirebaseFirestore.instance
+      .collection('chats')
+      .doc(widget.chatId)
+      .get();
+
+  final chatData = chatSnapshot.data();
+  if (chatData == null) return;
+
+  final mentorId = chatData['mentorId'];
+  final studentId = chatData['studentId'];
+
+  final receiverId =
+      uid == mentorId ? studentId : mentorId;
+
+  final callDoc = await FirebaseFirestore.instance.collection('calls').add({
+    'chatId': widget.chatId,
+    'callerId': uid,
+    'receiverId': receiverId,
+    'status': 'ringing',
+    'type': 'voice', // 👈 added
+    'createdAt': FieldValue.serverTimestamp(),
+  });
+
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (_) => VoiceCallPage(
+        callId: callDoc.id,
+        chatId: widget.chatId,
+        isCaller: true,
+      ),
+    ),
+  );
+}
+
+Future<void> _startVideoCall() async {
+  final uid = FirebaseAuth.instance.currentUser!.uid;
+
+  final chatSnapshot = await FirebaseFirestore.instance
+      .collection('chats')
+      .doc(widget.chatId)
+      .get();
+
+  final chatData = chatSnapshot.data();
+  if (chatData == null) return;
+
+  final mentorId = chatData['mentorId'];
+  final studentId = chatData['studentId'];
+
+  final receiverId =
+      uid == mentorId ? studentId : mentorId;
+
+  final callDoc = await FirebaseFirestore.instance.collection('calls').add({
+    'chatId': widget.chatId,
+    'callerId': uid,
+    'receiverId': receiverId,
+    'status': 'ringing',
+    'type': 'video', // 👈 important
+    'createdAt': FieldValue.serverTimestamp(),
+  });
+
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (_) => VideoCallPage(
+        callId: callDoc.id,
+        chatId: widget.chatId,
+        isCaller: true,
+      ),
+    ),
+  );
+}
 
   Future<void> _sendMessage(String uid) async {
     final text = _controller.text.trim();

@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'voice_call_page.dart';
+import 'video_call_page.dart';
 
 class IncomingCallPage extends StatelessWidget {
   final String callId;
   final String chatId; // ✅ ADD THIS
+  final String callType;
 
   const IncomingCallPage({
     super.key,
     required this.callId,
-    required this.chatId, // ✅ REQUIRED
+    required this.chatId,
+    required this.callType, // ✅ REQUIRED
   });
 
   @override
@@ -39,22 +42,35 @@ class IncomingCallPage extends StatelessWidget {
                   icon: const Icon(Icons.call),
                   label: const Text('Accept'),
                   onPressed: () async {
-                    await FirebaseFirestore.instance
-                        .collection('calls')
-                        .doc(callId)
-                        .update({'status': 'accepted'});
+  await FirebaseFirestore.instance
+      .collection('calls')
+      .doc(callId)
+      .update({'status': 'accepted'});
 
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => VoiceCallPage(
-                          callId: callId,
-                          chatId: chatId,
-                          isCaller: false,
-                        ),
-                      ),
-                    );
-                  },
+  if (callType == 'video') {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => VideoCallPage(
+          callId: callId,
+          chatId: chatId,
+          isCaller: false,
+        ),
+      ),
+    );
+  } else {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => VoiceCallPage(
+          callId: callId,
+          chatId: chatId,
+          isCaller: false,
+        ),
+      ),
+    );
+  }
+},
                 ),
                 const SizedBox(width: 24),
 

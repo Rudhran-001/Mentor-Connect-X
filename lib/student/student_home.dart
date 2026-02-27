@@ -6,7 +6,7 @@ import '../auth/auth_page.dart';
 import '../chat/chat_list_page.dart';
 import '../student/student_profile_page.dart';
 import 'placeholder_pages.dart';
-import '../calls/voice_call_page.dart'; // 🔊 NEW: Make sure this file exists
+// 🔊 NEW: Make sure this file exists
 import '../calls/incoming_call_page.dart';
 
 class StudentHomePage extends StatefulWidget {
@@ -22,38 +22,46 @@ class _StudentHomePageState extends State<StudentHomePage> {
   bool _isHandlingCall = false;
 
   @override
-  void initState() {
-    super.initState();
+void initState() {
+  super.initState();
 
-    final uid = FirebaseAuth.instance.currentUser?.uid;
+  final uid = FirebaseAuth.instance.currentUser?.uid;
 
-    if (uid != null) {
-      _callSubscription = FirebaseFirestore.instance
-    .collection('calls')
-    .where('receiverId', isEqualTo: uid)
-    .where('status', isEqualTo: 'ringing')
-    .snapshots()
-    .listen((snapshot) {
-  if (snapshot.docs.isNotEmpty) {
-    final callDoc = snapshot.docs.first;
-    final callId = callDoc.id;
-    final chatId = callDoc['chatId'];
+  if (uid != null) {
+    _callSubscription = FirebaseFirestore.instance
+        .collection('calls')
+        .where('receiverId', isEqualTo: uid)
+        .where('status', isEqualTo: 'ringing')
+        .snapshots()
+        .listen((snapshot) {
 
-          Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => IncomingCallPage(
-          callId: callId,
-          chatId: chatId,
-        ),
+      if (snapshot.docs.isNotEmpty && !_isHandlingCall) {
+        _isHandlingCall = true;
+
+        final callDoc = snapshot.docs.first;
+        final callId = callDoc.id;
+        final chatId = callDoc['chatId'];
+
+        final callType = callDoc.data().containsKey('type')
+            ? callDoc['type']
+            : 'voice';
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => IncomingCallPage(
+              callId: callId,
+              chatId: chatId,
+              callType: callType, // 🔥 PASS TYPE
             ),
-          ).then((_) {
-            _isHandlingCall = false;
-          }); 
-        }
-      });
-    }
+          ),
+        ).then((_) {
+          _isHandlingCall = false;
+        });
+      }
+    });
   }
+}
 
   @override
   void dispose() {
